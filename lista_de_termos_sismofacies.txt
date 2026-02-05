@@ -1,0 +1,215 @@
+==========================
+1. Sigmoid
+==========================
+
+Single-word synonyms:
+> curved
+> arcuate
+> bowed
+> concave
+> convex
+> hooked
+> tapered
+> sinuous
+
+Short-phrase synonyms:
+> gently curved foreset geometry
+> arcuate clinoform pattern
+> gradually dipping reflections
+> progradational rollover geometry
+> seaward-thickening wedge
+> sigmoidal clinoform set
+> gently concave-up reflections
+> transitional topset-foreset geometry
+
+==========================
+2. Oblique
+==========================
+
+Single-word synonyms:
+> inclined
+> slanted
+> tilted
+> diagonal
+> angular
+> leaning
+> dipping
+> asymmetric
+
+Short-phrase synonyms:
+> seaward-dipping reflection set
+> oblique clinoform pattern
+> forward-prograding geometry
+> inclined foreset package
+> dipping reflection configuration
+> asymmetric progradation
+> downlap-oriented reflections
+> gently tilted reflection pattern
+
+==========================
+3. Shingled
+==========================
+
+Single-word synonyms:
+> stacked
+> overlapping
+> layered
+> imbricated
+> superposed
+> tiered
+> laminated
+> repetitive
+
+Short-phrase synonyms:
+> overlapping foreset packages
+> stacked depositional wedges
+> imbricated reflection sets
+> repetitive progradational units
+> shingle-like stratification
+> layer-on-layer reflection geometry
+> offlapping clinoform pattern
+> vertically accreted lenses
+
+==========================
+4. Subparallel
+==========================
+
+Single-word synonyms:
+> nearly parallel
+> semi-parallel
+> quasi-parallel
+> convergent
+> slightly inclined
+> gently divergent
+> uniform
+> concordant
+
+Short-phrase synonyms:
+> almost parallel reflectors
+> weakly dipping layers
+> gently converging reflections
+> subhorizontal bedding pattern
+> mildly inclined strata
+> semi-parallel internal geometry
+> uniformly stratified reflections
+> near-parallel lamination
+
+==========================
+5. Parallel
+==========================
+
+Single-word synonyms:
+> flat
+> planar
+> horizontal
+> linear
+> concordant
+> even
+> uniform
+> tabular
+
+Short-phrase synonyms:
+> continuous horizontal reflections
+> parallel-bedded strata
+> concordant seismic layering
+> tabular reflection pattern
+> laterally uniform bedding
+> parallel-laminated unit
+> even-bedded sequence
+> consistent reflector orientation
+
+==========================
+6. Divergent
+==========================
+
+Single-word synonyms:
+> fanning
+> spreading
+> expanding
+> opening
+> radiating
+> outward-dipping
+> diverging
+> flaring
+
+Short-phrase synonyms:
+> fanning reflection geometry
+> seaward-thickening wedge pattern
+> divergent foreset reflections
+> expanding stratigraphic unit
+> outward-spreading reflections
+> wedge-shaped growth strata
+> differentially dipping reflectors
+> divergent clinoform architecture
+
+==========================
+7. Mounded
+==========================
+
+Single-word synonyms:
+> domed
+> bulbous
+> hummocky
+> convex
+> rounded
+> lenticular
+> isolated
+> positive-relief
+
+Short-phrase synonyms:
+> convex-up reflection geometry
+> mounded depositional body
+> positive-relief feature
+> isolated buildup or bioherm
+> lenticular reflection pattern
+> bulbous sedimentary mound
+> dome-shaped seismic package
+> reef-like seismic buildup
+
+==========================
+8. Deformed
+==========================
+
+Single-word synonyms:
+> disturbed
+> folded
+> faulted
+> warped
+> contorted
+> distorted
+> sheared
+> chaotic
+
+Short-phrase synonyms:
+> structurally disturbed reflections
+> folded and faulted strata
+> chaotic internal configuration
+> deformation-related geometry
+> fault-bounded reflector patterns
+> warped reflection package
+> compressional structural style
+> distorted seismic facies
+
+==========================
+9. Hummocky
+==========================
+
+Single-word synonyms:
+> irregular
+> undulating
+> wavy
+> rolling
+> rugged
+> corrugated
+> bumpy
+> uneven
+
+Short-phrase synonyms:
+> wavy seismic reflection geometry
+> irregular undulating bedding
+> hummocky cross-stratified pattern
+> low-relief mound-and-swale structure
+> uneven depositional surface
+> gently rolling internal reflections
+> corrugated seismic texture
+> subtle relief topography in reflectors

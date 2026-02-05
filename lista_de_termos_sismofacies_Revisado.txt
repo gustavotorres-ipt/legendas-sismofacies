@@ -1,0 +1,125 @@
+==========================
+1. Sigmoid
+==========================
+
+> sigmoid
+> clinoform
+> progradational geometry
+> sigmoidal clinoform set
+> oblique clinoform pattern
+> forward-prograding geometry
+
+==========================
+3. Shingled
+==========================
+
+> overlapping geometry
+> superposed structure
+> shingled reflection
+> imbricated reflection sets
+> shingle stratification
+> layer-on-layer reflection geometry
+
+==========================
+4. Subparallel
+==========================
+
+> nearly parallel reflection set
+* almost parallel reflectors
+> weakly dipping layers
+> gently converging reflections
+> subhorizontal bedding pattern
+* mildly inclined strata
+* semi-parallel internal geometry
+> uniformly stratified reflections
+* near-parallel lamination
+
+==========================
+5. Parallel geometry
+==========================
+
+> continuous horizontal reflections
+> planar geometry
+> uniform layering pattern
+> parallel-bedded strata
+> concordant seismic layering
+> tabular reflection pattern
+* laterally uniform bedding
+> parallel-laminated unit
+> horizontally layered sequence
+
+
+==========================
+6. Divergent
+==========================
+
+> divergent bedform geometry
+> spreading stratigraphic unit
+> diverging seismic pattern
+> flaring reflection geometry
+> fanning reflection geometry
+> thickening wedge pattern
+> divergent foreset reflections
+> differentially dipping reflectors
+
+==========================
+7. Mounded geometry
+==========================
+
+> mounded geometry
+> domed structure
+> rounded pattern
+> positive-relief geometry
+> convex-up reflection geometry
+> mounded depositional body
+> positive-relief feature
+> lenticular reflection pattern
+> dome-shaped seismic
+
+==========================
+8. Deformed structure
+==========================
+
+> disturbed reflection zone
+> folded reflector package
+> distorted reflection set
+> structurally disturbed reflections
+> folded and faulted strata
+> deformation-related geometry
+> warped reflection package
+> compressional structural style
+> distorted seismic face
+
+==========================
+9. Hummocky
+==========================
+
+> rugged reflector package
+> corrugated seismic unit.
+> hummocky cross-stratified pattern
+> low-relief mound-and-swale structure
+> uneven depositional surface
+> gently rolling internal reflections
+> corrugated seismic texture
+
+==========================
+10. Chaotic
+==========================
+
+> chaotic reflection
+> undefined seismic structure
+> chaotic pattern
+> undefined internal geometry
+> chaotic internal geometry
+> internal structuraly disturbed reflexions
+
+
+==========================
+11. Wavy
+==========================
+
+> wavy structure
+> wavy seismic reflection geometry
+> wave-like seismic unit
+> undulating bedding configuration
+> undulatory reflector pattern
