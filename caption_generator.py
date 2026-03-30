@@ -4,104 +4,38 @@ import json
 import argparse
 from dataclasses import dataclass
 from datetime import datetime
-
-# Referência https://wiki.seg.org/wiki/Seismic_Facies_Classification
-DICT_EVENTS = {
-    'seismic': [
-        'a seismic section', 'a seismic image', 'subsurface model', 'a slice',
-        'a section', 'a 2D section', '2D subsurface model',
-        'a subsurface representation', 'seismic model', 'a 2D seismic model',
-    ],
-    'casual': [
-        'we see here', 'this image represents', 'we observe here',
-        'this image demonstrates', 'this depicts', '',
-    ],
-    'sigmoid': [
-        'a sigmoid', 'a clinoform', 'progradational geometry',
-        'a sigmoidal clinoform set', 'an oblique clinoform pattern',
-        'forward-prograding geometry',
-    ],
-    'shingled': [
-        'overlapping geometry', 'superposed structure', 'shingled reflection',
-        'imbricated reflection sets', 'shingled stratification',
-        'layer-on-layer reflection geometry',
-    ],
-    'subparallel': [
-        'nearly parallel reflection set', 'almost parallel reflectors',
-        'weakly dipping layers', 'gently converging reflections',
-        'subhorizontal bedding pattern', 'mildly inclined strata',
-        'semi-parallel internal geometry', 'uniformly stratified reflections',
-        'near-parallel lamination',
-    ],
-    'parallel': [
-        'a parallel geometry', 'continuous horizontal reflections', 'a planar geometry',
-        'an uniform layering pattern', 'a parallel-bedded strata',
-        'concordant seismic layering', 'a tabular reflection pattern',
-        'laterally uniform bedding', 'a parallel-laminated unit',
-        'an horizontally layered sequence',
-    ],
-    'divergent': [
-        'a divergent bedform geometry', 'a spreading stratigraphic unit',
-        'diverging seismic pattern', 'flaring reflection geometry',
-        'a fanning reflection geometry', 'thickening wedge pattern',
-        'divergent foreset reflections', 'differentially dipping reflectors',
-    ],
-    'mounded': [
-        'mounded geometry', 'domed structure', 'rounded pattern',
-        'positive-relief geometry', 'convex-up reflection geometry',
-        'mounded depositional body', 'positive-relief feature',
-        'lenticular reflection pattern', 'dome-shaped seismic pattern',
-    ],
-    'deformed': [
-        'disturbed reflection zone', 'folded reflector package',
-        'distorted reflection set', 'structurally disturbed reflections',
-        'a folded and faulted strata', 'deformation-related geometry',
-        'a warped reflection package', 'deformed structure', 'distorted seismic face',
-    ],
-    'hummocky': [
-        'a rugged reflector package', 'a corrugated seismic unit.',
-        'a hummocky cross-stratified pattern', 'a low-relief mound-and-swale structure',
-        'an uneven depositional surface', 'gently rolling internal reflections',
-        'a corrugated seismic texture',
-    ],
-    'chaotic': [
-        'chaotic reflections', 'an undefined seismic structure', 'a chaotic pattern',
-        'undefined internal geometry', 'chaotic internal geometry',
-        'internal structuraly disturbed reflexions',
-    ],
-    'chaotic-channels': [
-        'disordered reflection patterns indicative of potential meandering channels',
-        'irregular seismic reflections suggestive of channel systems',
-        'undefined internal geometry with possibility of containing channels',
-        'complex and chaotic reflection patterns indicating possible presence of channels',
-        'chaotic seismic reflections potentially indicative of meandering channel systems',
-    ],
-    'wavy': [
-        'a wavy structure', 'wavy seismic reflection geometry', 'wave-like seismic unit',
-        'undulating bedding configuration', 'undulatory reflector pattern',
-        'imbricated reflection sets', 'layer-on-layer reflection geometry',
-    ],
-    'connectors': ['of', 'with', 'containing', 'presenting', 'exhibiting', 'featuring',
-                   'characterized by', 'comprising'],
-    #'plural_connectors':   [' of', ' with', ' containing', ' presenting', ' exhibiting'],
-}
-
-POSSIBLE_LABELS = ['sigmoid', 'shingled', 'subparallel', 'parallel', 'divergent',
-                   'mounded', 'deformed', 'hummocky', 'chaotic', 'wavy', ]
+from typing import Optional
+from dict_synonyms import SEISMIC_EVENTS, POSSIBLE_LABELS
 
 
-def get_filename(label: str) -> str:
+PROBAB_FAN_AT_START = 0.25
+
+
+def get_filename(info_facies) -> str:
     dt = datetime.now()
 
-    filename = f"{label}_{dt.year}-{dt.month:02}-{dt.day:02}_" + \
-        f"{dt.hour:02}-{dt.minute:02}-{dt.microsecond}"
-    return f'{filename}.json'
+    filename = f'{info_facies.label}_'
+    filename += f'{info_facies.frequency}_{info_facies.amplitude}_{info_facies.noise}'
+
+    data_info = f"{dt.year}-{dt.month:02}-{dt.day:02}"
+    time_info = f"{dt.hour:02}-{dt.minute:02}-{dt.microsecond}"
+    return f'{filename}_{data_info}_{time_info}.json'
+
 
 def is_plural(seismic_caption: str) -> bool:
-    #if seismic_caption[-1] == 's':
     if seismic_caption[0:3] == "an " or seismic_caption[0:2] == "a ":
         return False
     return True
+
+
+@dataclass
+class FaciesInfo:
+    label: str
+    amplitude: Optional[str|None]
+    frequency: Optional[str|None]
+    noise: Optional[str|None]
+
+
 
 @dataclass
 class CaptionGenerator:
@@ -110,8 +44,32 @@ class CaptionGenerator:
     min_captions_file: int = 2
     max_captions_file: int = 7
 
+    def get_freq_amp_noi_info(self, info_facies: FaciesInfo):
+        # frequency, amplitude, noise info
+        fan_info = []
+
+        if info_facies.frequency is not None:
+            fan_info.append(f'{info_facies.frequency} frequency')
+
+        if info_facies.amplitude is not None:
+            fan_info.append(f'{info_facies.amplitude} amplitude')
+
+        if info_facies.noise is not None:
+            fan_info.append(f'{info_facies.noise} noise')
+
+        if len(fan_info) < 1:
+            return ''
+        elif len(fan_info) < 2:
+            return fan_info[0]
+
+        # Shuffle the order of the information
+        random.shuffle(fan_info)
+        # Return in format high amplitude, high frequency and low noise
+        return f"{', '.join(fan_info[:-1])} and {fan_info[-1]}"
+
+
     def select_caption(self, label):
-        possible_captions = DICT_EVENTS[label]
+        possible_captions = SEISMIC_EVENTS[label]
 
         return random.choice(possible_captions)
 
@@ -119,62 +77,78 @@ class CaptionGenerator:
         selected_label = random.choice(POSSIBLE_LABELS)
         return selected_label
 
-    def create_caption(self, label_face: str) -> str:
-        # caption = f"{self.select_caption('casual')} a {self.select_caption('seismic')}"
+    def create_caption(self, info_facies: FaciesInfo, ) -> str:
         caption = self.select_caption('seismic')
 
-        selected_caption = self.select_caption(label_face)
-        
+        selected_caption = self.select_caption(info_facies.label)
+
         connector = self.select_caption('connectors')
-        if is_plural(selected_caption):
-            # connector = self.select_caption('plural_connectors')
-            caption += f' {connector} {selected_caption}'
+        # if is_plural(selected_caption):
+        #     caption += f' {connector} {selected_caption}'
+        # else:
+        #     article = 'an' if selected_caption.lower()[0] in 'aeiou' else 'a'
+        #     caption += f' {connector} {article} {selected_caption}'
+        caption += f' {connector} {selected_caption}'
+
+        freq_amp_noi_info = self.get_freq_amp_noi_info(info_facies)
+        connector = random.choice(['with', 'presenting', 'of'])
+
+        start = random.choice(['A ', ''])
+        if random.random() > PROBAB_FAN_AT_START:
+            caption = f'{start}{caption} {connector} {freq_amp_noi_info}'
         else:
-            # connector = self.select_caption('singular_connectors')
-            article = 'an' if selected_caption.lower()[0] in 'aeiou' else 'a'
-            caption += f' {connector} {article} {selected_caption}'
+            caption = f'{start}{freq_amp_noi_info} {caption}'
+        caption = caption.replace('  ', ' ')
 
         print(caption.strip())
         return f'{caption.strip()}.'
 
-    def generate_captions_for_label(self, label: str):
+    def generate_captions_for_label(self, info_facies: FaciesInfo):
         n_captions_file = random.randint(
             self.min_captions_file, self.max_captions_file)
-
         captions = []
 
         for _ in range(n_captions_file):
-            cap = self.create_caption(label)
+            cap = self.create_caption(info_facies)
             captions.append(cap)
 
         return captions    
 
-    def save_captions_for_label(self, label: str, captions: list[str]):
+    def save_captions_for_label(
+        self, captions: list[str], info_facies: FaciesInfo
+    ):
         dir_captions = self.output_dir
         os.makedirs(dir_captions, exist_ok=True)
 
-        filename = get_filename(label)
+        filename = get_filename(info_facies)
 
         dict_captions = {
             'captions': captions,
-            'label': label
+            'label': info_facies.label,
+            'amplitude': info_facies.amplitude,
+            'frequency': info_facies.frequency,
+            'noise': info_facies.noise,
         }
-
         full_filename = os.path.join(dir_captions, filename)
 
         with open(full_filename, 'w') as fout:
             json.dump(dict_captions, fout, indent=4)
-
         print(full_filename, "saved successfully.")
 
     def generate_captions(self) -> None:
+        possible_values = [None, 'low', 'high']
+
         for _ in range(self.total_files):
-
             label = self.select_random_label()
+            amplitude = random.choice(possible_values) 
+            frequency = random.choice(possible_values)
+            noise = random.choice(possible_values)
 
-            captions = self.generate_captions_for_label(label)
+            info_facies = FaciesInfo(label, amplitude, frequency, noise)
 
-            self.save_captions_for_label(label, captions)
+            captions = self.generate_captions_for_label(info_facies)
+
+            self.save_captions_for_label(captions, info_facies)
 
 
 def main():

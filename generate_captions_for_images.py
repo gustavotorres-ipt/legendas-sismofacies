@@ -2,41 +2,34 @@ import os
 import json
 import shutil
 import argparse
-from caption_generator import CaptionGenerator
+from caption_generator import CaptionGenerator, FaciesInfo
 
-# SEISMIC_FACES_FILE = "layers_and_seismic_faces.json"
+def extract_info_from_filename(filename: str) -> FaciesInfo:
+
+    return FaciesInfo()
+
 
 def generate_captions_for_imgs(path_images, path_captions):
-
     caption_generator = CaptionGenerator(0, path_captions)
+    images = os.listdir(path_images)
+    os.makedirs(path_captions, exist_ok=True)
 
-    # with open(SEISMIC_FACES_FILE) as f:
-    #     dict_seismic_face = json.load(f)
+    # generate_captions_for_face(images, path_captions, caption_generator, face_name)
 
-    list_facies = os.listdir(path_images)
+    for img_filename in images:
 
-    for face_name in list_facies:
+        fullpath_caption = os.path.join(
+            path_captions, f'{img_filename[:-4]}.json')
 
-        path_images_face = os.path.join(path_images, face_name)
+        captions = caption_generator.generate_captions_for_label(face_name)
 
-        # face_name = dict_seismic_face[face_name]
-
-        # os.makedirs(path_images_layer, exist_ok=True)
-        os.makedirs(path_captions, exist_ok=True)
-
-        images_face = os.listdir(path_images_face)
-
-        generate_captions_for_face(images_face, path_captions, caption_generator, face_name)
-
-        # remove_images_from_folder(images_face, path_images, path_images_face)
-
-
-def remove_images_from_folder(images_layer, path_images, path_images_layer):
-    for img_filename in images_layer:
-        src_path = os.path.join(path_images_layer, img_filename)
-        dst_path = os.path.join(path_images, img_filename)
-
-        shutil.copy(src_path, dst_path)
+        dict_captions = {
+            'captions': captions,
+            'label': face_name
+        }
+        with open(fullpath_caption, 'w') as fout:
+            json.dump(dict_captions, fout, indent=4)
+            print(fullpath_caption, "saved.")
 
 
 def generate_captions_for_face(
