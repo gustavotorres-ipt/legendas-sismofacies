@@ -74,15 +74,14 @@ SEISMIC_EVENTS = {
         'undulating bedding configuration', 'undulatory reflector pattern',
         'imbricated reflection sets', 'layer-on-layer reflection geometry',
     ],
-    # Intensity
-    'high': [
-        'elevated', 
-    ],
     'connectors': ['of', 'with', 'containing', 'presenting', 'exhibiting',
                    'featuring', 'characterized by'],
-    #'plural_connectors':   [' of', ' with', ' containing', ' presenting', ' exhibiting'],
 }
 
 
 POSSIBLE_LABELS = ['sigmoid', 'shingled', 'subparallel', 'parallel', 'divergent',
                    'mounded', 'deformed', 'hummocky', 'chaotic', 'wavy', ]
+
+
+FULL_FACIES_NAMES = {'cha': 'chaotic', 'par': 'parallel',
+                     'sig': 'sigmoid', 'div': 'divergent',}

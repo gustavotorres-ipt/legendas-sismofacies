@@ -5,9 +5,7 @@ import argparse
 from tqdm import tqdm
 from caption_generator import CaptionGenerator, FaciesInfo
 from dataclasses import asdict
-
-full_labels = {'cha': 'chaotic', 'par': 'parallel',
-               'sig': 'sigmoid', 'div': 'divergent',}
+from dict_synonyms import FULL_FACIES_NAMES
 
 def extract_flag(regex, img_name):
     match = re.search(regex, img_name)
@@ -22,7 +20,7 @@ def extract_info_from_filename(filename: str) -> FaciesInfo:
     match = re.search(r's-([a-z]+)', filename)
     if not match:
         return FaciesInfo('')
-    label = full_labels[match.group(1)]
+    label = FULL_FACIES_NAMES[match.group(1)]
 
     amplitude = extract_flag(r'ampl-([HL])', filename)
     freq      = extract_flag(r'freq-([HL])', filename)
