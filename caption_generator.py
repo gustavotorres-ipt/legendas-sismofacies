@@ -2,7 +2,8 @@ import random
 import os
 import json
 import argparse
-from dataclasses import dataclass
+from tqdm import tqdm
+from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
 from dict_synonyms import SEISMIC_EVENTS, POSSIBLE_LABELS
@@ -31,10 +32,9 @@ def is_plural(seismic_caption: str) -> bool:
 @dataclass
 class FaciesInfo:
     label: str
-    amplitude: Optional[str|None]
-    frequency: Optional[str|None]
-    noise: Optional[str|None]
-
+    amplitude: Optional[str|None] = None
+    frequency: Optional[str|None] = None
+    noise: Optional[str|None] = None
 
 
 @dataclass
@@ -83,11 +83,6 @@ class CaptionGenerator:
         selected_caption = self.select_caption(info_facies.label)
 
         connector = self.select_caption('connectors')
-        # if is_plural(selected_caption):
-        #     caption += f' {connector} {selected_caption}'
-        # else:
-        #     article = 'an' if selected_caption.lower()[0] in 'aeiou' else 'a'
-        #     caption += f' {connector} {article} {selected_caption}'
         caption += f' {connector} {selected_caption}'
 
         freq_amp_noi_info = self.get_freq_amp_noi_info(info_facies)
@@ -100,7 +95,6 @@ class CaptionGenerator:
             caption = f'{start}{freq_amp_noi_info} {caption}'
         caption = caption.replace('  ', ' ')
 
-        print(caption.strip())
         return f'{caption.strip()}.'
 
     def generate_captions_for_label(self, info_facies: FaciesInfo):
@@ -122,23 +116,18 @@ class CaptionGenerator:
 
         filename = get_filename(info_facies)
 
-        dict_captions = {
-            'captions': captions,
-            'label': info_facies.label,
-            'amplitude': info_facies.amplitude,
-            'frequency': info_facies.frequency,
-            'noise': info_facies.noise,
-        }
+        dict_captions = asdict(info_facies)
+        dict_captions['captions'] = captions,
         full_filename = os.path.join(dir_captions, filename)
 
         with open(full_filename, 'w') as fout:
-            json.dump(dict_captions, fout, indent=4)
+            json.dump(asdict(info_facies), fout, indent=4)
         print(full_filename, "saved successfully.")
 
     def generate_captions(self) -> None:
         possible_values = [None, 'low', 'high']
 
-        for _ in range(self.total_files):
+        for _ in tqdm(range(self.total_files)):
             label = self.select_random_label()
             amplitude = random.choice(possible_values) 
             frequency = random.choice(possible_values)
