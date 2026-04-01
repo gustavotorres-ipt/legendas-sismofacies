@@ -13,14 +13,22 @@ EXTRA_FOLDERS = ['jpg', 'npy']
 
 
 def get_inline_num(image_name: str) -> int:
-    match = re.search(r'il_[0-9]+', image_name)
+    match = re.search(r'_il_[0-9]+', image_name)
     if match:
         il_img = match[0] 
+        il_number = int(il_img[4:])
+        return il_number
     else:
-        print("Error. Invalid inline.")
-        sys.exit(1)
-    il_number = int(il_img[3:])
-    return il_number
+        match = re.search(r'_x[0-9]+_[0-9]+', image_name)
+        if match:
+            il_img = match[0]
+            il_number = int(il_img.split('_')[-1])
+            # if 'sig' in image_name:
+            #     print(il_number)
+            return il_number
+        else:
+            print("Error. Invalid inline.")
+            sys.exit(1)
 
 
 def remove_n_images(face: str, number_to_remove: int, folder_images: str
@@ -142,7 +150,8 @@ def main():
         os.makedirs(folder_dst_train, exist_ok=True)
         os.makedirs(folder_dst_val, exist_ok=True)
 
-        images_layer = sorted(os.listdir(folder_src_layer))
+        images_layer = sorted(os.listdir(folder_src_layer),
+                              key=get_inline_num)
 
         images_train, images_val = split_train_val(
             images_layer, first_inline_validation)

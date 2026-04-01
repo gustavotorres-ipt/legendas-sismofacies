@@ -1,5 +1,5 @@
 FIRST_INLINE_VAL = {
-    'f3': 581,
+    'f3': 300,
     'parihaka': 400,
     'penobscot': 480,
 }
