@@ -9,6 +9,7 @@ from typing import Optional
 from dict_synonyms import SEISMIC_EVENTS, POSSIBLE_LABELS
 
 
+# Probability of frequency, amplitude and noise at start
 PROBAB_FAN_AT_START = 0.25
 
 
@@ -117,11 +118,12 @@ class CaptionGenerator:
         filename = get_filename(info_facies)
 
         dict_captions = asdict(info_facies)
-        dict_captions['captions'] = captions,
+        dict_captions['captions'] = captions
+
         full_filename = os.path.join(dir_captions, filename)
 
         with open(full_filename, 'w') as fout:
-            json.dump(asdict(info_facies), fout, indent=4)
+            json.dump(dict_captions, fout, indent=4)
         print(full_filename, "saved successfully.")
 
     def generate_captions(self) -> None:
@@ -136,7 +138,6 @@ class CaptionGenerator:
             info_facies = FaciesInfo(label, amplitude, frequency, noise)
 
             captions = self.generate_captions_for_label(info_facies)
-
             self.save_captions_for_label(captions, info_facies)
 
 
