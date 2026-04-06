@@ -44,8 +44,7 @@ def remove_n_images(face: str, number_to_remove: int, folder_images: str
         os.remove(filepath)
         # shutil.rmtree(filepath)
 
-
-def balance_folder(folder_images: str):
+def get_facies_samples(folder_images):
     images_names = os.listdir(folder_images)
 
     labels_facies = []
@@ -56,9 +55,16 @@ def balance_folder(folder_images: str):
             continue
         label = FULL_FACIES_NAMES[match.group(1)[:3]]
         labels_facies.append(label)
+    return labels_facies
+
+
+def balance_folder(folder_images: str, min_samples=None):
+    labels_facies = get_facies_samples(folder_images)
 
     class_count = Counter(labels_facies)
-    min_samples = min(class_count.values())
+
+    if min_samples is None:
+        min_samples = min(class_count.values())
 
     print("Balancing classes...")
     for face in tqdm(class_count):
@@ -131,7 +137,7 @@ def count_instances(folder_train_val, count_file_name):
     print(count_file_path, "saved.")
 
 
-def main():
+def main(args):
     # folders_layers = sorted(list(layer_seisface.keys()))
     folders_layers = [
         filename for filename in os.listdir(args.input_folder)
@@ -162,9 +168,10 @@ def main():
         print(f"Copying validation images in layer {c}...")
         copy_images(images_val, folder_src_layer, folder_dst_val)
 
-    if args.balance:
-        balance_folder(FOLDER_TRAINING)
-        balance_folder(FOLDER_VALIDATION)
+    if args.balance or args.train_samples_num is not None:
+        balance_folder(FOLDER_TRAINING, args.train_samples_num)
+    if args.balance or args.val_samples_num is not None:
+        balance_folder(FOLDER_VALIDATION, args.val_samples_num)
 
     count_instances(FOLDER_TRAINING, 'train_split.txt')
     count_instances(FOLDER_VALIDATION, 'validation_split.txt')
@@ -181,6 +188,10 @@ if __name__ == "__main__":
                         help='Seismic cube name.')
     parser.add_argument('-b', '--balance', action='store_true',
                         help='Flag to indicate if data is balanced.')
+    parser.add_argument('-t', '--train_samples_num', type=int, default=None,
+                        help='Number of samples by class training.')
+    parser.add_argument('-v', '--val_samples_num', type=int, default=None,
+                        help='Number of samples by class validation.')
     args = parser.parse_args()
     assert args.current_cube in list(LAYERS_SEISFACE.keys()), \
         "Invalid seismic volume name."
@@ -200,4 +211,4 @@ if __name__ == "__main__":
 
     layer_seisface = LAYERS_SEISFACE[current_cube]
 
-    main()
+    main(args)
