@@ -46,10 +46,10 @@ SEISMIC_EVENTS = {
         'lenticular reflection pattern', 'dome-shaped seismic pattern',
     ],
     'deformed': [
-        'disturbed reflection zone', 'folded reflector package',
-        'distorted reflection set', 'structurally disturbed reflections',
+        'a disturbed reflection zone', 'a folded reflector package',
+        'a distorted reflection set', 'structurally disturbed reflections',
         'a folded and faulted strata', 'deformation-related geometry',
-        'a warped reflection package', 'deformed structure', 'distorted seismic face',
+        'a warped reflection package', 'a deformed structure', 'distorted seismic face',
     ],
     'hummocky': [
         'a rugged reflector package', 'a corrugated seismic unit.',
@@ -78,6 +78,19 @@ SEISMIC_EVENTS = {
                    'featuring', 'characterized by'],
 }
 
+AMPL_FREQ_NOISE = {
+    'high amplitude': ['high amplitude', 'high signal strength',
+                       'strong signal','high-power signal'],
+    'low amplitude' : ['low amplitude', 'low signal strength',
+                      'weak signal', 'low-power signal'],
+    'high frequency': ['high frequency', 'short-period signal',
+                       'short wavelength', 'high-frequency components',],
+    'low frequency' : ['low frequency', 'long-period signal',
+                      'low-frequency band', 'low-frequency seismic energy',],
+    'high noise'    : ['high noise', 'noisy data', 'low signal-to-noise ratio',],
+    'low noise'     : ['low noise', 'clean data', 'noise-free components',
+                       'high signal-to-noise ratio',],
+}
 
 POSSIBLE_LABELS = ['sigmoid', 'shingled', 'subparallel', 'parallel', 'divergent',
                    'mounded', 'deformed', 'hummocky', 'chaotic', 'wavy', ]

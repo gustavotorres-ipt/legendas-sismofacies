@@ -1,16 +1,19 @@
-import random
 import os
+import re
 import json
+import random
 import argparse
 from tqdm import tqdm
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
-from dict_synonyms import SEISMIC_EVENTS, POSSIBLE_LABELS
+from dict_synonyms import SEISMIC_EVENTS, POSSIBLE_LABELS, AMPL_FREQ_NOISE
 
+# Probability of adding frequency, amplitude or noise
+PROBABILITY_ADDING_FAN = 0.5
 
-# Probability of frequency, amplitude and noise at start
-PROBAB_FAN_AT_START = 0.25
+# Probability of frequency, amplitude and noise at start of setence
+PROBABILITY_START_WITH_FAN = 0.25
 
 
 def get_filename(info_facies) -> str:
@@ -49,24 +52,36 @@ class CaptionGenerator:
         # frequency, amplitude, noise info
         fan_info = []
 
-        if info_facies.frequency is not None:
+        if (info_facies.frequency is not None
+                and random.random() < PROBABILITY_ADDING_FAN
+            ):
             fan_info.append(f'{info_facies.frequency} frequency')
 
-        if info_facies.amplitude is not None:
+        if (info_facies.amplitude is not None
+                and random.random() < PROBABILITY_ADDING_FAN
+            ):
             fan_info.append(f'{info_facies.amplitude} amplitude')
 
-        if info_facies.noise is not None:
+        if (info_facies.noise is not None
+                and random.random() < PROBABILITY_ADDING_FAN
+            ):
             fan_info.append(f'{info_facies.noise} noise')
 
         if len(fan_info) < 1:
             return ''
-        elif len(fan_info) < 2:
-            return fan_info[0]
 
+        elif len(fan_info) < 2:
+            synonyms = AMPL_FREQ_NOISE[fan_info[0]]
+            # Select a random synonym
+            return random.choice(synonyms)
+
+        # Select a random synonym
+        fan_info_syn = [random.choice( AMPL_FREQ_NOISE[info] ) for info in fan_info]
         # Shuffle the order of the information
-        random.shuffle(fan_info)
+        random.shuffle(fan_info_syn)
+
         # Return in format high amplitude, high frequency and low noise
-        return f"{', '.join(fan_info[:-1])} and {fan_info[-1]}"
+        return f"{', '.join(fan_info_syn[:-1])} and {fan_info_syn[-1]}"
 
 
     def select_caption(self, label):
@@ -87,14 +102,16 @@ class CaptionGenerator:
         caption += f' {connector} {selected_caption}'
 
         freq_amp_noi_info = self.get_freq_amp_noi_info(info_facies)
-        connector = random.choice(['with', 'presenting', 'of'])
 
+        connector = random.choice(['with', 'presenting', 'of']) \
+                        if freq_amp_noi_info else ''
         start = random.choice(['A ', ''])
-        if random.random() > PROBAB_FAN_AT_START:
+
+        if random.random() > PROBABILITY_START_WITH_FAN:
             caption = f'{start}{caption} {connector} {freq_amp_noi_info}'
         else:
             caption = f'{start}{freq_amp_noi_info} {caption}'
-        caption = caption.replace('  ', ' ')
+        caption = re.sub(r'\s+', ' ', caption)
 
         return f'{caption.strip()}.'
 
