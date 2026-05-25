@@ -1,9 +1,8 @@
 # Referência https://wiki.seg.org/wiki/Seismic_Facies_Classification
 SEISMIC_EVENTS = {
     'seismic': [
-        'seismic section', 'seismic image', 'subsurface model', 'slice',
-        'section', '2D section', '2D subsurface model',
-        'subsurface representation', 'seismic model', '2D seismic model',
+        'seismic section', 'seismic image', 'slice', 'seismic slice',
+        'section', '2D section', 'seismic model', '2D seismic model',
     ],
     'casual': [
         'we see here', 'this image represents', 'we observe here',
@@ -16,8 +15,7 @@ SEISMIC_EVENTS = {
     ],
     'shingled': [
         'overlapping geometry', 'superposed structure', 'shingled reflection',
-        'imbricated reflection sets', 'shingled stratification',
-        'layer-on-layer reflection geometry',
+        'shingled stratification',
     ],
     'subparallel': [
         'nearly parallel reflection set', 'almost parallel reflectors',
@@ -34,22 +32,15 @@ SEISMIC_EVENTS = {
         'an horizontally layered sequence',
     ],
     'divergent': [
-        'a divergent bedform geometry', 'a spreading stratigraphic unit',
-        'diverging seismic pattern', 'flaring reflection geometry',
-        'a fanning reflection geometry', 'thickening wedge pattern',
-        'divergent foreset reflections', 'differentially dipping reflectors',
+        'a divergent bedform geometry', 'diverging seismic pattern',
+        'thickening wedge pattern', 'divergent foreset reflections',
+        'differentially dipping reflectors',
     ],
     'mounded': [
         'mounded geometry', 'domed structure', 'rounded pattern',
         'positive-relief geometry', 'convex-up reflection geometry',
         'mounded depositional body', 'positive-relief feature',
-        'lenticular reflection pattern', 'dome-shaped seismic pattern',
-    ],
-    'deformed': [
-        'a disturbed reflection zone', 'a folded reflector package',
-        'a distorted reflection set', 'structurally disturbed reflections',
-        'a folded and faulted strata', 'deformation-related geometry',
-        'a warped reflection package', 'a deformed structure', 'distorted seismic face',
+        'dome-shaped seismic pattern',
     ],
     'hummocky': [
         'a rugged reflector package', 'a corrugated seismic unit.',
@@ -72,28 +63,42 @@ SEISMIC_EVENTS = {
     'wavy': [
         'a wavy structure', 'wavy seismic reflection geometry', 'wave-like seismic unit',
         'undulating bedding configuration', 'undulatory reflector pattern',
-        'imbricated reflection sets', 'layer-on-layer reflection geometry',
     ],
-    'connectors': ['of', 'with', 'containing', 'presenting', 'exhibiting',
-                   'featuring', 'characterized by'],
+    'folded': [
+        'a folded reflector package', 'a folded strata',
+        'deformation-related geometry',
+    ],
+    'faulted': [
+        'faulted structure', 'rigid deformation known or fault',
+        'structural discontinuity', 'tectonic fault',
+    ],
+    'tilted': [
+        'tilt', 'tectonic tilting', 'inclined horizontal beds',
+        'tilted horizontal beds',
+    ],
+    'connectors': [
+        'of', 'containing', 'presenting', 'exhibiting',
+        'featuring', 'characterized by',
+    ],
+    'connectors details': [
+        'with', '. This section has',
+        '. The seismic section has', '. The image has',
+    ],
 }
 
 AMPL_FREQ_NOISE = {
-    'high amplitude': ['high amplitude', 'high signal strength',
-                       'strong signal','high-power signal'],
-    'low amplitude' : ['low amplitude', 'low signal strength',
-                      'weak signal', 'low-power signal'],
+    'high amplitude': ['high amplitude', 'strong signal',],
+    'low amplitude' : ['low amplitude', 'weak signal'],
     'high frequency': ['high frequency', 'short-period signal',
                        'short wavelength', 'high-frequency components',],
     'low frequency' : ['low frequency', 'long-period signal',
-                      'low-frequency band', 'low-frequency seismic energy',],
+                       'low-frequency seismic energy',],
     'high noise'    : ['high noise', 'noisy data', 'low signal-to-noise ratio',],
-    'low noise'     : ['low noise', 'clean data', 'noise-free components',
-                       'high signal-to-noise ratio',],
+    'low noise'     : ['low noise', 'noise-free components', ],
 }
 
 POSSIBLE_LABELS = ['sigmoid', 'shingled', 'subparallel', 'parallel', 'divergent',
-                   'mounded', 'deformed', 'hummocky', 'chaotic', 'wavy', ]
+                   'mounded', 'hummocky', 'chaotic', 'wavy', ]
 
 
 FULL_FACIES_NAMES = {'cha': 'chaotic', 'par': 'parallel',

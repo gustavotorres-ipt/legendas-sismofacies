@@ -12,9 +12,6 @@ from dict_synonyms import SEISMIC_EVENTS, POSSIBLE_LABELS, AMPL_FREQ_NOISE
 # Probability of adding frequency, amplitude or noise
 PROBABILITY_ADDING_FAN = 0.5
 
-# Probability of frequency, amplitude and noise at start of setence
-PROBABILITY_START_WITH_FAN = 0.25
-
 
 def get_filename(info_facies) -> str:
     dt = datetime.now()
@@ -103,15 +100,16 @@ class CaptionGenerator:
 
         freq_amp_noi_info = self.get_freq_amp_noi_info(info_facies)
 
-        connector = random.choice(['with', 'presenting', 'of']) \
-                        if freq_amp_noi_info else ''
-        start = random.choice(['A ', ''])
+        connector = self.select_caption(
+            'connectors details') if freq_amp_noi_info else ''
+        # connector = random.choice([
+        #     'with', 'containing', '. It contains',
+        #     '. The seismic section has', '. The image has',
+        # ]) if freq_amp_noi_info else ''
 
-        if random.random() > PROBABILITY_START_WITH_FAN:
-            caption = f'{start}{caption} {connector} {freq_amp_noi_info}'
-        else:
-            caption = f'{start}{freq_amp_noi_info} {caption}'
+        caption = f'{caption} {connector} {freq_amp_noi_info}'
         caption = re.sub(r'\s+', ' ', caption)
+        caption = re.sub(r'\s+\.', '.', caption)
 
         return f'{caption.strip()}.'
 
@@ -139,6 +137,7 @@ class CaptionGenerator:
 
         full_filename = os.path.join(dir_captions, filename)
 
+        print('\n'.join(dict_captions['captions']))
         with open(full_filename, 'w') as fout:
             json.dump(dict_captions, fout, indent=4)
         print(full_filename, "saved successfully.")
