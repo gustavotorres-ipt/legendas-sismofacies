@@ -1,60 +1,55 @@
 import os
+import re
 import json
-import shutil
 import argparse
-from caption_generator import CaptionGenerator
+from tqdm import tqdm
+from caption_generator import CaptionGenerator, FaciesInfo
+from dataclasses import asdict
+from dict_synonyms import FULL_FACIES_NAMES
 
-# SEISMIC_FACES_FILE = "layers_and_seismic_faces.json"
+def extract_flag(regex, img_name):
+    match = re.search(regex, img_name)
+    found_value = match.group(1) if match and match.group(1) else None
+
+    if found_value is None:
+        return None
+    return 'low' if found_value =='L' else 'high'
+
+
+def extract_info_from_filename(filename: str) -> FaciesInfo:
+    match = re.search(r's-([a-z]+)', filename)
+    if not match:
+        return FaciesInfo('')
+    label = FULL_FACIES_NAMES[match.group(1)]
+
+    amplitude = extract_flag(r'ampl-([HL])', filename)
+    freq      = extract_flag(r'freq-([HL])', filename)
+    noise     = extract_flag(r'nois-([HL])', filename)
+    return FaciesInfo(label, amplitude, freq, noise)
+
 
 def generate_captions_for_imgs(path_images, path_captions):
-
     caption_generator = CaptionGenerator(0, path_captions)
+    images = os.listdir(path_images)
+    os.makedirs(path_captions, exist_ok=True)
 
-    # with open(SEISMIC_FACES_FILE) as f:
-    #     dict_seismic_face = json.load(f)
+    print(f'Generating captions in {path_captions}...')
 
-    list_facies = os.listdir(path_images)
+    for img_filename in tqdm(images):
 
-    for face_name in list_facies:
+        fullpath_caption = os.path.join(
+            path_captions, f'{img_filename[:-4]}.json')
 
-        path_images_face = os.path.join(path_images, face_name)
+        info_facies = extract_info_from_filename(img_filename)
+        captions = caption_generator.generate_captions_for_label(info_facies)
 
-        # face_name = dict_seismic_face[face_name]
+        dict_captions = asdict(info_facies)
+        dict_captions['captions'] = captions
 
-        # os.makedirs(path_images_layer, exist_ok=True)
-        os.makedirs(path_captions, exist_ok=True)
-
-        images_face = os.listdir(path_images_face)
-
-        generate_captions_for_face(images_face, path_captions, caption_generator, face_name)
-
-        # remove_images_from_folder(images_face, path_images, path_images_face)
-
-
-def remove_images_from_folder(images_layer, path_images, path_images_layer):
-    for img_filename in images_layer:
-        src_path = os.path.join(path_images_layer, img_filename)
-        dst_path = os.path.join(path_images, img_filename)
-
-        shutil.copy(src_path, dst_path)
-
-
-def generate_captions_for_face(
-        images_face, path_captions_face, caption_generator, face_name
-):
-    for img_filename in images_face:
-
-        fullpath_caption = os.path.join(path_captions_face, f'{img_filename[:-4]}.json')
-
-        captions = caption_generator.generate_captions_for_label(face_name)
-
-        dict_captions = {
-            'captions': captions,
-            'label': face_name
-        }
         with open(fullpath_caption, 'w') as fout:
             json.dump(dict_captions, fout, indent=4)
-            print(fullpath_caption, "saved.")
+            # print(fullpath_caption, "saved.")
+
 
 def main():
     parser = argparse.ArgumentParser('Generate captions for images.')
